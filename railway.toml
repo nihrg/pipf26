@@ -1,0 +1,3 @@
+[deploy]
+startCommand = "python csv_to_sql.py && sleep infinity"
+restartPolicyType = "ON_FAILURE"

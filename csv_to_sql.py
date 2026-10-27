@@ -3,8 +3,10 @@
 
 from __future__ import annotations
 
+import argparse
 import csv
 import os
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -131,5 +133,34 @@ def main() -> None:
     )
 
 
+def watch() -> None:
+    print(f"Watching {CSV_PATH.name}. Save the CSV to reload Railway.")
+    last_mtime: float | None = None
+    while True:
+        try:
+            mtime = CSV_PATH.stat().st_mtime
+        except FileNotFoundError:
+            time.sleep(0.5)
+            continue
+        if last_mtime is None or mtime != last_mtime:
+            last_mtime = mtime
+            time.sleep(0.2)
+            try:
+                main()
+            except Exception as exc:
+                print(f"Reload failed: {exc}")
+        time.sleep(0.5)
+
+
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Load class_dataset.csv into Railway Postgres.")
+    parser.add_argument(
+        "--watch",
+        action="store_true",
+        help="Reload Railway whenever class_dataset.csv is saved.",
+    )
+    args = parser.parse_args()
+    if args.watch:
+        watch()
+    else:
+        main()
