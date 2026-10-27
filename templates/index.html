@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Students</title>
+  </head>
+  <body>
+    <h1>Students</h1>
+    {% if students %}
+    <ul>
+      {% for name in students %}
+      <li>{{ name }}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No students found.</p>
+    {% endif %}
+  </body>
+</html>
